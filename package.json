@@ -1,0 +1,12 @@
+{
+  "name": "school-spravki",
+  "version": "1.0.0",
+  "main": "server.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^9.4.3",
+    "express": "^4.22.2",
+    "pdfkit": "^0.14.0",
+    "sql.js": "^1.14.1"
+  }
+}

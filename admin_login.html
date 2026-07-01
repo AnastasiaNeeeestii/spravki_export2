@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Вход для администратора{% endblock %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 40px auto;">
+  <div class="card">
+    <div class="card-title">Панель администратора</div>
+    <p class="card-subtitle">Введите пароль для доступа к управлению системой</p>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/admin/login">
+      <div class="form-group">
+        <label>Пароль</label>
+        <input type="password" name="password" placeholder="Введите пароль" required autofocus>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Войти</button>
+    </form>
+
+    <div style="margin-top:16px; font-size:12px; color:#999; text-align:center;">
+      Доступ только для сотрудников школы
+    </div>
+  </div>
+</div>
+{% endblock %}

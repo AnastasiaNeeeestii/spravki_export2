@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Электронные справки{% endblock %} — МКОУ «Грановская школа»</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            color: #333;
+            background: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ── Шапка как на сайте Госвеб ── */
+        .site-header {
+            background: #1a53a0;
+            color: #fff;
+            padding: 0;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 24px;
+            max-width: 1100px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        .header-logo {
+            width: 48px;
+            height: 48px;
+            background: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 22px;
+        }
+        .header-title h1 {
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+        .header-title p {
+            font-size: 12px;
+            opacity: 0.85;
+            margin-top: 2px;
+        }
+
+        .site-nav {
+            background: #154490;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+        .nav-inner {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 0;
+        }
+        .nav-inner a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            padding: 10px 16px;
+            display: block;
+            opacity: 0.9;
+            border-bottom: 3px solid transparent;
+            transition: all 0.15s;
+        }
+        .nav-inner a:hover, .nav-inner a.active {
+            opacity: 1;
+            border-bottom-color: #fff;
+            background: rgba(255,255,255,0.08);
+        }
+
+        /* ── Контент ── */
+        .page-content {
+            flex: 1;
+            max-width: 1100px;
+            margin: 32px auto;
+            padding: 0 24px;
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border: 1px solid #dde3ec;
+            border-radius: 4px;
+            padding: 32px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a53a0;
+            margin-bottom: 8px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #1a53a0;
+        }
+        .card-subtitle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 28px;
+        }
+
+        /* ── Форма ── */
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #444;
+            margin-bottom: 6px;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 9px 12px;
+            border: 1px solid #bcc6d6;
+            border-radius: 3px;
+            font-size: 14px;
+            color: #333;
+            background: #fff;
+            transition: border-color 0.15s;
+        }
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #1a53a0;
+            box-shadow: 0 0 0 2px rgba(26,83,160,0.12);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 24px;
+            border: none;
+            border-radius: 3px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+        .btn-primary {
+            background: #1a53a0;
+            color: #fff;
+        }
+        .btn-primary:hover { background: #154490; }
+        .btn-danger {
+            background: #c0392b;
+            color: #fff;
+            padding: 6px 14px;
+            font-size: 12px;
+        }
+        .btn-danger:hover { background: #a93226; }
+        .btn-secondary {
+            background: #6c757d;
+            color: #fff;
+        }
+        .btn-secondary:hover { background: #5a6268; }
+
+        .alert {
+            padding: 12px 16px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            border-left: 4px solid;
+        }
+        .alert-error {
+            background: #fdf2f2;
+            border-color: #c0392b;
+            color: #7b241c;
+        }
+        .alert-success {
+            background: #eafaf1;
+            border-color: #27ae60;
+            color: #1e8449;
+        }
+
+        /* ── Таблица ── */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            background: #1a53a0;
+            color: #fff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+        td {
+            padding: 9px 12px;
+            border-bottom: 1px solid #eaeef4;
+            vertical-align: middle;
+        }
+        tr:hover td { background: #f7f9fc; }
+
+        /* ── Футер ── */
+        .site-footer {
+            background: #1a53a0;
+            color: rgba(255,255,255,0.8);
+            text-align: center;
+            padding: 14px;
+            font-size: 12px;
+            margin-top: auto;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #eaf0fb;
+            color: #1a53a0;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-top">
+        <div class="header-logo">🏫</div>
+        <div class="header-title">
+            <h1>МКОУ «Грановская школа»</h1>
+            <p>д. Грановщина, Иркутский муниципальный округ, Иркутская область</p>
+        </div>
+    </div>
+    <nav class="site-nav">
+        <div class="nav-inner">
+            <a href="/" {% if request.path == '/' %}class="active"{% endif %}>Получить справку</a>
+            <a href="https://sh-granovskaya-r138.gosweb.gosuslugi.ru" target="_blank">Сайт школы</a>
+            {% if session.get('admin') %}
+            <a href="/admin/panel" {% if '/admin' in request.path %}class="active"{% endif %}>Панель администратора</a>
+            <a href="/admin/logout">Выйти</a>
+            {% else %}
+            <a href="/admin">Администратор</a>
+            {% endif %}
+        </div>
+    </nav>
+</header>
+
+<main class="page-content">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ 'success' if category == 'success' else 'error' }}">{{ message }}</div>
+        {% endfor %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer">
+    © 2026 МКОУ «Грановская школа» — Система электронных справок
+</footer>
+
+</body>
+</html>

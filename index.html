@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Получить справку{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+
+  <div class="card">
+    <div class="card-title">Запрос справки об обучении</div>
+    <p class="card-subtitle">Заполните форму — справка будет сформирована автоматически и скачана в формате PDF</p>
+
+    {% if error %}
+    <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="POST" action="/get_spravka">
+      <div class="form-group">
+        <label>ФИО учащегося <span style="color:#c0392b">*</span></label>
+        <input type="text" name="full_name" placeholder="Например: Иванов Иван Иванович" required>
+      </div>
+      <div class="form-group">
+        <label>Класс <span style="color:#c0392b">*</span></label>
+        <input type="text" name="class_name" placeholder="Например: 5А" required>
+      </div>
+      <div class="form-group">
+        <label>Куда требуется справка <span style="color:#c0392b">*</span></label>
+        <select name="spravka_type" required>
+          <option value="" disabled selected>— выберите назначение —</option>
+          {% for t in spravka_types %}
+          <option value="{{ t }}">{{ t }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%; margin-top:8px;">
+        Сформировать и скачать справку
+      </button>
+    </form>
+  </div>
+
+  <div>
+    <div class="card" style="margin-bottom: 16px;">
+      <div class="card-title" style="font-size:16px;">Как это работает</div>
+      <div style="display:flex; flex-direction:column; gap:14px; margin-top:12px;">
+        {% for step, text in [
+          ('1', 'Введите ФИО ребёнка точно так, как указано в школьных документах'),
+          ('2', 'Укажите класс (например: 5А, 9Б)'),
+          ('3', 'Выберите организацию, для которой нужна справка'),
+          ('4', 'Нажмите кнопку — справка скачается автоматически'),
+        ] %}
+        <div style="display:flex; gap:12px; align-items:flex-start;">
+          <div style="background:#1a53a0; color:#fff; border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; flex-shrink:0;">{{ step }}</div>
+          <div style="font-size:13px; color:#555; padding-top:4px;">{{ text }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+</div>
+{% endblock %}

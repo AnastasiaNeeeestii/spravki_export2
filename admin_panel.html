@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block title %}Панель администратора{% endblock %}
+
+{% block content %}
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+  <h2 style="font-size:20px; color:#1a53a0; font-weight:700;">Панель администратора</h2>
+  <a href="/admin/logout" class="btn btn-secondary" style="font-size:13px; padding:7px 16px;">Выйти</a>
+</div>
+
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:24px;">
+
+  <!-- Добавить ученика -->
+  <div class="card">
+    <div class="card-title" style="font-size:16px;">Добавить учащегося</div>
+    <form method="POST" action="/admin/student/add" style="margin-top:12px;">
+      <div class="form-group">
+        <label>ФИО <span style="color:#c0392b">*</span></label>
+        <input type="text" name="full_name" placeholder="Иванов Иван Иванович" required>
+      </div>
+      <div class="form-group">
+        <label>Класс <span style="color:#c0392b">*</span></label>
+        <input type="text" name="class_name" placeholder="5А" required>
+      </div>
+      <div class="form-group">
+        <label>Номер приказа о зачислении <span style="color:#c0392b">*</span></label>
+        <input type="text" name="order_number" placeholder="№ 45-у" required>
+      </div>
+      <div class="form-group">
+        <label>Дата зачисления <span style="color:#c0392b">*</span></label>
+        <input type="text" name="order_date" placeholder="01.09.2024" required>
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;">Добавить</button>
+    </form>
+  </div>
+
+  <!-- Журнал заявок -->
+  <div class="card">
+    <div class="card-title" style="font-size:16px;">Журнал выданных справок</div>
+    {% if logs %}
+    <div style="overflow-x:auto; margin-top:12px;">
+      <table>
+        <thead>
+          <tr>
+            <th>№ справки</th>
+            <th>ФИО</th>
+            <th>Класс</th>
+            <th>Назначение</th>
+            <th>Дата выдачи</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for log in logs %}
+          <tr>
+            <td><span class="badge">{{ log.spravka_number }}</span></td>
+            <td>{{ log.student_name }}</td>
+            <td><span class="badge">{{ log.class_name }}</span></td>
+            <td style="font-size:12px;">{{ log.spravka_type }}</td>
+            <td style="font-size:11px; color:#888;">{{ log.created_at[:16] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p style="color:#999; font-size:13px; margin-top:12px;">Справки ещё не выдавались.</p>
+    {% endif %}
+  </div>
+
+</div>
+
+<!-- Список учеников -->
+<div class="card" style="margin-top:24px;">
+  <div class="card-title" style="font-size:16px;">База учащихся <span class="badge" style="font-size:13px;">{{ students|length }}</span></div>
+  <div style="overflow-x:auto; margin-top:12px;">
+    <table>
+      <thead>
+        <tr>
+          <th>№</th>
+          <th>ФИО</th>
+          <th>Класс</th>
+          <th>Номер приказа</th>
+          <th>Дата зачисления</th>
+          <th>Действие</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td style="color:#999;">{{ loop.index }}</td>
+          <td><strong>{{ s.full_name }}</strong></td>
+          <td><span class="badge">{{ s.class_name }}</span></td>
+          <td>{{ s.order_number }}</td>
+          <td>{{ s.order_date }}</td>
+          <td>
+            <form method="POST" action="/admin/student/delete/{{ s.id }}"
+                  onsubmit="return confirm('Удалить {{ s.full_name }}?')">
+              <button type="submit" class="btn btn-danger">Удалить</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}
